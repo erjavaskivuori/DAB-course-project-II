@@ -17,8 +17,8 @@
 <div class="px-6">
   {#if course}
     <h1 class="text-3xl my-6">{course.title}</h1>
+    <h2 class="text-xl">Questions:</h2>
     {#if course.questions}
-      <h2 class="text-xl">Questions:</h2>
       <ul>
         {#each course.questions as question}
           <li>
@@ -28,6 +28,10 @@
           </li>
         {/each}
       </ul>
+    {:else}
+      <p>
+        No questions yet, be the first to ask!
+      </p>
     {/if}
   {/if}
 </div>
