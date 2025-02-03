@@ -1,6 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import QuestionList from "./QuestionList.svelte";
   export let courseId;
 
   let course;
@@ -18,6 +17,14 @@
 <div>
   {#if course}
     <h1>{course.title}</h1>
+    {#if course.questions}
+      <h2>Questions</h2>
+      <ul>
+        {#each course.questions as question}
+          <li>
+            <a href="/questions/{question.id}">{question.content}</a></li>
+        {/each}
+      </ul>
+    {/if}
   {/if}
-  <QuestionList questions={course?.questions} />
 </div>
