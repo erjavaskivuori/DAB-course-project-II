@@ -8,9 +8,14 @@ const handleGetCourses = async () => {
 const handleGetCourse = async (request) => {
   const searchParams = new URL(request.url).searchParams;
   const course = await courseService.getCourse(searchParams.get("id"));
+  const questions = await courseService.getCourseQuestions(searchParams.get("id"));
   const courseData = {
     id: course[0].id,
     title: course[0].title,
+    questions: questions.map((q) => ({
+      id: q.id,
+      content: q.content,
+    })),
   }
   return Response.json(courseData);
 };
