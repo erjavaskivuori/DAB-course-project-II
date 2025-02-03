@@ -1,0 +1,7 @@
+INSERT INTO answers (question_id, content, user_id) VALUES (1, 'A monolithic architecture is built as one large system and is usually one code-base. A microservices architecture is built as a suite of small services, each running in its own process and communicating with lightweight mechanisms, often an HTTP resource API.', 'user2');
+
+INSERT INTO answers (question_id, content, user_id) VALUES (2, 'Performance can be measured in many ways, but the most common way is to measure the response time of a system under a specific load. Other common metrics include throughput, latency, and resource utilization.', 'user1');
+
+INSERT INTO answers (question_id, content, user_id) VALUES (3, 'Kubernetes is an open-source container-orchestration system for automating application deployment, scaling, and management. It works by creating a cluster of nodes that run containerized applications and automatically scaling them based on resource usage.', 'user3');
+
+INSERT INTO answers (question_id, content, user_id) VALUES (4, 'Waterfall is a linear and sequential approach to software development, where each phase must be completed before the next phase can begin. Agile is an iterative and incremental approach to software development, where requirements and solutions evolve through collaboration between self-organizing cross-functional teams.', 'user4');
