@@ -14,16 +14,20 @@
   });
 </script>
 
-<div>
-  {#if question}
-    <h1>{question.content}</h1>
-    {#if question.answers}
-      <h2>Answers</h2>
-      <ul>
-        {#each question.answers as answer}
-          <li>{answer.content}</li>
-        {/each}
-      </ul>
+<div class="flex w-full h-full flex-row items-center justify-center">
+  <div class="sm:max-w-2xl lg:max-w-4xl px-6">
+    {#if question}
+      <h1 class="text-3xl">Question: {question.content}</h1>
+      {#if question.answers}
+        <h2 class="text-2xl my-5">Answers:</h2>
+        <ul>
+          {#each question.answers as answer}
+            <li class="block max-w-m p-6 bg-white border border-gray-200 rounded-lg shadow-sm my-3">
+              {answer.content}
+            </li>
+          {/each}
+        </ul>
+      {/if}
     {/if}
-  {/if}
+  </div>
 </div>

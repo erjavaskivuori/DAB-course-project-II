@@ -14,15 +14,18 @@
   });
 </script>
 
-<div>
+<div class="px-6">
   {#if course}
-    <h1>{course.title}</h1>
+    <h1 class="text-3xl my-6">{course.title}</h1>
     {#if course.questions}
-      <h2>Questions</h2>
+      <h2 class="text-xl">Questions:</h2>
       <ul>
         {#each course.questions as question}
           <li>
-            <a href="/questions/{question.id}">{question.content}</a></li>
+            <a href="/questions/{question.id}" class="block max-w-m p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 my-3">
+              {question.content}
+            </a>
+          </li>
         {/each}
       </ul>
     {/if}
