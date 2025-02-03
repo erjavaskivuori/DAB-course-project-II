@@ -17,8 +17,15 @@
 <div class="flex w-full h-full flex-row items-center justify-center">
   <div class="sm:max-w-2xl lg:max-w-4xl px-6">
     {#if question}
-      <h1 class="text-3xl">Question: {question.content}</h1>
-      <h2 class="text-2xl my-5">Answers:</h2>
+      <h1 class="text-3xl my-6">Question: {question.content}</h1>
+      <form action="">
+        <label for="question">Write your answer:</label>
+        <div class="flex flex-row my-3">
+          <input type="text" id="question" name="question" class="block w-full p-2 border border-gray-200 rounded-lg shadow-sm mr-2" />
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold p-1.5 rounded-lg">Send</button>
+        </div>
+      </form>
+      <h2 class="text-2xl mt-7 mb-4">Answers:</h2>
       {#if question.answers && question.answers[0].id !== null}
         <ul>
           {#each question.answers as answer}
