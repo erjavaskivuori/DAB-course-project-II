@@ -7,18 +7,33 @@ const handleGetCourses = async () => {
 
 const handleGetCourse = async (request) => {
   const searchParams = new URL(request.url).searchParams;
-  const course = await courseService.getCourse(searchParams.get("id"));
-  const questions = await courseService.getCourseQuestions(searchParams.get("id"));
+  const questions = await courseService.getCourseWithQuestions(searchParams.get("id"));
   const courseData = {
-    id: course[0].id,
-    title: course[0].title,
+    id: questions[0].course_id,
+    title: questions[0].course_title,
     questions: questions.map((q) => ({
-      id: q.id,
-      content: q.content,
+      id: q.question_id,
+      content: q.question_content,
+      last_updated: q.question_last_updated,
     })),
   }
   return Response.json(courseData);
 };
+
+const handleGetQuestion = async (request) => {
+  const searchParams = new URL(request.url).searchParams;
+  const answers = await courseService.getQuestionWithAnswers(searchParams.get("id"));
+  const questionData = {
+    id: answers[0].question_id,
+    content: answers[0].question_content,
+    answers: answers.map((a) => ({
+      id: a.answer_id,
+      content: a.answer_content,
+      last_updated: a.answer_last_updated,
+    })),
+  }
+  return Response.json(questionData);
+}
 
 const handlePostAnswer = async (request) => {
   const data = await request.json();
@@ -44,6 +59,11 @@ const urlMapping = [
     pattern: new URLPattern({ pathname: "/course" }),
     method: "GET",
     fn: handleGetCourse,
+  },
+  {
+    pattern: new URLPattern({ pathname: "/question" }),
+    method: "GET",
+    fn: handleGetQuestion,
   },
   {
     pattern: new URLPattern({ pathname: "/llm-answer" }),
