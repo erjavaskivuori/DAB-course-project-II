@@ -5,6 +5,16 @@ const handleGetCourses = async () => {
   return Response.json(await courseService.getAllCourses());
 };
 
+const handleGetCourse = async (request) => {
+  const searchParams = new URL(request.url).searchParams;
+  const course = await courseService.getCourse(searchParams.get("id"));
+  const courseData = {
+    id: course[0].id,
+    title: course[0].title,
+  }
+  return Response.json(courseData);
+};
+
 const handlePostAnswer = async (request) => {
   const data = await request.json();
 
@@ -24,6 +34,11 @@ const urlMapping = [
     pattern: new URLPattern({ pathname: "/courses" }),
     method: "GET",
     fn: handleGetCourses,
+  },
+  {
+    pattern: new URLPattern({ pathname: "/course" }),
+    method: "GET",
+    fn: handleGetCourse,
   },
   {
     pattern: new URLPattern({ pathname: "/llm-answer" }),

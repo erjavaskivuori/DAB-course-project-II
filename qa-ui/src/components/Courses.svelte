@@ -18,7 +18,8 @@
   <h1>Courses</h1>
   <ul>
     {#each courses as course}
-      <li>{course.title}</li>
+      <li>
+        <a href="/courses/{course.id}">{course.title}</a></li>
     {/each}
   </ul>
 </div>
