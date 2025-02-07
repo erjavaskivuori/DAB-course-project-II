@@ -35,7 +35,27 @@ const handleGetQuestion = async (request) => {
   return Response.json(questionData);
 }
 
+const handlePostQuestion = async (request) => {
+  const data = await request.json();
+  try {
+    await courseService.postQuestion(data.course, data.question, data.user);
+    return Response.json({ status: 201 });
+  } catch (e) {
+    return Response.json({ status: 500 });
+  }
+};
+
 const handlePostAnswer = async (request) => {
+  const data = await request.json();
+  try {
+    await courseService.postAnswer(data.question, data.answer, data.user);
+    return Response.json({ status: 201 });
+  } catch (e) {
+    return Response.json({ status: 500 });
+  }
+}
+
+const handlePostAnswerToLLM = async (request) => {
   const data = await request.json();
 
   const response = await fetch("http://llm-api:7000/", {
@@ -66,9 +86,19 @@ const urlMapping = [
     fn: handleGetQuestion,
   },
   {
-    pattern: new URLPattern({ pathname: "/llm-answer" }),
+    pattern: new URLPattern({ pathname: "/ask-question" }),
+    method: "POST",
+    fn: handlePostQuestion,
+  },
+  {
+    pattern: new URLPattern({ pathname: "/answer" }),
     method: "POST",
     fn: handlePostAnswer,
+  },
+  {
+    pattern: new URLPattern({ pathname: "/llm-answer" }),
+    method: "POST",
+    fn: handlePostAnswerToLLM,
   },
 ];
 

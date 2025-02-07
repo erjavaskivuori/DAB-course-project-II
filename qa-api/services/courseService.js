@@ -32,4 +32,18 @@ const getQuestionWithAnswers = async (questionId) => {
   `;
 };
 
-export { getAllCourses, getCourseWithQuestions, getQuestionWithAnswers };
+const postQuestion = async (courseId, question, userId) => {
+  return await sql`
+    INSERT INTO questions (course_id, content, user_id)
+    VALUES (${courseId}, ${question}, ${userId})
+  `;
+};
+
+const postAnswer = async (questionId, answer, userId) => {
+  return await sql`
+    INSERT INTO answers (question_id, content, user_id)
+    VALUES (${questionId}, ${answer}, ${userId})
+  `;
+};
+
+export { getAllCourses, getCourseWithQuestions, getQuestionWithAnswers, postQuestion, postAnswer };
