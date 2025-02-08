@@ -57,3 +57,10 @@ export const postAnswer = async (questionId, answer, userId) => {
     VALUES (${questionId}, ${answer}, ${userId})
   `;
 };
+
+export const postUpvote = async (objectId, objectType, userId) => {
+  return await sql`
+    INSERT INTO upvotes (object_id, object_type, user_id)
+    VALUES (${objectId}, ${objectType}, ${userId})
+  `;
+};

@@ -59,6 +59,16 @@ const handlePostAnswer = async (request) => {
   }
 }
 
+const handlePostUpvote = async (request) => {
+  const data = await request.json();
+  try {
+    await courseService.postUpvote(data.id, data.type, data.user);
+    return Response.json({ status: 201 });
+  } catch (e) {
+    return Response.json({ status: 500 });
+  };
+};
+
 const handlePostAnswerToLLM = async (request) => {
   const data = await request.json();
 
@@ -98,6 +108,11 @@ const urlMapping = [
     pattern: new URLPattern({ pathname: "/answer" }),
     method: "POST",
     fn: handlePostAnswer,
+  },
+  {
+    pattern: new URLPattern({ pathname: "/upvote" }),
+    method: "POST",
+    fn: handlePostUpvote,
   },
   {
     pattern: new URLPattern({ pathname: "/llm-answer" }),
