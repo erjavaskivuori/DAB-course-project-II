@@ -1,6 +1,9 @@
 <script>
   import { onMount } from "svelte";
+  import { get } from "svelte/store";
   import { userUuid } from "../stores/stores.js";
+  import UpvoteButton from "./UpvoteButton.svelte";
+
   export let questionId;
   let answerInput = "";
   let question;
@@ -12,10 +15,11 @@
   };
 
   const postAnswer = async (event) => {
+    const user = get(userUuid);
     const data = {
       question: questionId,
       answer: answerInput,
-      user: userUuid,
+      user: user,
     };
     const response = await fetch("/api/answer", {
       method: "POST",
@@ -53,9 +57,14 @@
       <h2 class="text-2xl mt-7 mb-4">Answers:</h2>
       {#if question.answers && question.answers[0].id !== null}
         <ul>
-          {#each question.answers as answer}
-            <li class="block max-w-m p-6 bg-white border border-gray-200 rounded-lg shadow-sm my-3">
-              {answer.content}
+          {#each question.answers as answer (answer.id)}
+            <li>
+              <div class="flex flex-col items-start justify-between my-4">
+                <p class="block max-w-m p-6 bg-white border border-gray-200 rounded-lg shadow-sm mb-2">
+                  {answer.content}
+                </p>
+                <UpvoteButton upvotes={answer.upvoted_by} />
+              </div>
             </li>
           {/each}
         </ul>
