@@ -11,11 +11,13 @@ const handleGetCourse = async (request) => {
   const courseData = {
     id: questions[0].course_id,
     title: questions[0].course_title,
-    questions: questions.map((q) => ({
-      id: q.question_id,
-      content: q.question_content,
-      last_updated: q.question_last_updated,
-    })),
+    questions: await Promise.all(questions.map(async (q) => ({
+          id: q.question_id,
+          content: q.question_content,
+          last_updated: q.question_last_updated,
+          upvoted_by: (await courseService.getUpvotes(q.question_id, "question"))
+          .map((u) => u.upvoted_by),
+        }))),
   }
   return Response.json(courseData);
 };
@@ -26,12 +28,14 @@ const handleGetQuestion = async (request) => {
   const questionData = {
     id: answers[0].question_id,
     content: answers[0].question_content,
-    answers: answers.map((a) => ({
+    answers: await Promise.all(answers.map(async (a) => ({
       id: a.answer_id,
       content: a.answer_content,
       last_updated: a.answer_last_updated,
-    })),
-  }
+      upvoted_by: (await courseService.getUpvotes(a.answer_id, "answer"))
+      .map((u) => u.upvoted_by),
+    }))),
+  };
   return Response.json(questionData);
 }
 

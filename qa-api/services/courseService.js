@@ -1,49 +1,59 @@
 import { sql } from "../database/database.js";
 
-const getAllCourses = async () => {
+export const getAllCourses = async () => {
   return await sql `SELECT * FROM courses`;
 };
 
-const getCourseWithQuestions = async (courseId) => {
+export const getCourseWithQuestions = async (courseId) => {
   return await sql`
     SELECT 
-      courses.id AS course_id,
-      courses.title AS course_title,
-      questions.id AS question_id,
-      questions.content AS question_content,
-      questions.last_updated AS question_last_updated
-    FROM courses
-    LEFT JOIN questions ON courses.id = questions.course_id
-    WHERE courses.id = ${courseId}
+      c.id AS course_id,
+      c.title AS course_title,
+      q.id AS question_id,
+      q.content AS question_content,
+      q.last_updated AS question_last_updated
+    FROM courses c
+    LEFT JOIN questions q 
+      ON c.id = q.course_id
+    WHERE c.id = ${courseId}
+    ORDER BY question_last_updated DESC
   `;
 };
 
-const getQuestionWithAnswers = async (questionId) => {
+export const getQuestionWithAnswers = async (questionId) => {
   return await sql`
-    SELECT 
-      questions.id AS question_id,
-      questions.content AS question_content,
-      answers.id AS answer_id,
-      answers.content AS answer_content,
-      answers.last_updated AS answer_last_updated
-    FROM questions
-    LEFT JOIN answers ON questions.id = answers.question_id
+    SELECT
+      q.id AS question_id,
+      q.content AS question_content,
+      a.id AS answer_id,
+      a.content AS answer_content,
+      a.last_updated AS answer_last_updated
+    FROM questions q
+    LEFT JOIN answers a
+      ON q.id = a.question_id
     WHERE questions.id = ${questionId}
+    ORDER BY answer_last_updated DESC
   `;
 };
 
-const postQuestion = async (courseId, question, userId) => {
+export const getUpvotes = async (objectId, objectType) => {
+  return await sql`
+    SELECT user_id AS upvoted_by
+    FROM upvotes
+    WHERE object_id = ${objectId} AND object_type = ${objectType}
+  `;
+};
+
+export const postQuestion = async (courseId, question, userId) => {
   return await sql`
     INSERT INTO questions (course_id, content, user_id)
     VALUES (${courseId}, ${question}, ${userId})
   `;
 };
 
-const postAnswer = async (questionId, answer, userId) => {
+export const postAnswer = async (questionId, answer, userId) => {
   return await sql`
     INSERT INTO answers (question_id, content, user_id)
     VALUES (${questionId}, ${answer}, ${userId})
   `;
 };
-
-export { getAllCourses, getCourseWithQuestions, getQuestionWithAnswers, postQuestion, postAnswer };
