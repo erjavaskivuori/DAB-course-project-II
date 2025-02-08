@@ -64,3 +64,19 @@ export const postUpvote = async (objectId, objectType, userId) => {
     VALUES (${objectId}, ${objectType}, ${userId})
   `;
 };
+
+export const updateQuestion = async ( questioId ) => {
+  return await sql`
+    UPDATE questions
+    SET last_updated = NOW()
+    WHERE id = ${questioId}
+  `;
+};
+
+export const updateAnswer = async ( answerId ) => {
+  return await sql`
+    UPDATE answers
+    SET last_updated = NOW()
+    WHERE id = ${answerId}
+  `;
+};

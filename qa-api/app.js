@@ -63,6 +63,11 @@ const handlePostUpvote = async (request) => {
   const data = await request.json();
   try {
     await courseService.postUpvote(data.id, data.type, data.user);
+    if (data.type === "answer") {
+      await courseService.updateAnswer(data.id);
+    } else {
+      await courseService.updateQuestion(data.id);
+    };
     return Response.json({ status: 201 });
   } catch (e) {
     return Response.json({ status: 500 });
