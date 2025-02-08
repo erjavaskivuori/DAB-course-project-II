@@ -31,7 +31,7 @@ export const getQuestionWithAnswers = async (questionId) => {
     FROM questions q
     LEFT JOIN answers a
       ON q.id = a.question_id
-    WHERE questions.id = ${questionId}
+    WHERE q.id = ${questionId}
     ORDER BY answer_last_updated DESC
   `;
 };
