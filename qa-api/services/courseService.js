@@ -17,6 +17,7 @@ export const getCourseWithQuestions = async (courseId) => {
       ON c.id = q.course_id
     WHERE c.id = ${courseId}
     ORDER BY question_last_updated DESC
+    LIMIT 20
   `;
 };
 
@@ -33,6 +34,7 @@ export const getQuestionWithAnswers = async (questionId) => {
       ON q.id = a.question_id
     WHERE q.id = ${questionId}
     ORDER BY answer_last_updated DESC
+    LIMIT 20
   `;
 };
 
