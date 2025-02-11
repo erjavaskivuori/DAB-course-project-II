@@ -42,7 +42,10 @@ const handleGetQuestion = async (request) => {
 const handlePostQuestion = async (request) => {
   const data = await request.json();
   try {
-    await courseService.postQuestion(data.course, data.question, data.user);
+    const questionId = await courseService.postQuestion(data.course, data.question, data.user);
+
+    fetchAndStoreLLMAnswers(data.question, questionId);
+
     return Response.json({ status: 201 });
   } catch (e) {
     return Response.json({ status: 500 });
@@ -74,18 +77,41 @@ const handlePostUpvote = async (request) => {
   };
 };
 
-const handlePostAnswerToLLM = async (request) => {
-  const data = await request.json();
+const fetchAndStoreLLMAnswers = async (question, questionId) => {
+  try {
+    const answerPromises = [];
 
-  const response = await fetch("http://llm-api:7000/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+    for (let i = 0; i < 3; i++) {
+      answerPromises.push(fetchLLMAnswer(question));
+    }
 
-  return response;
+    const responses = await Promise.all(answerPromises);
+
+    for (const llmResponseText of responses) {
+      const formattedAnswer = `LLM Answer: ${llmResponseText}`;
+      await courseService.postAnswer(questionId, formattedAnswer, 1);
+    }
+  } catch (error) {
+    console.error("Error fetching LLM answers:", error);
+  }
+};
+
+const fetchLLMAnswer = async (question) => {
+  try {
+    const response = await fetch("http://llm-api:7000/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question }),
+    });
+
+    const LLMApiResponse = await response.json();
+    return LLMApiResponse[0]?.generated_text || "No response from LLM";
+  } catch (error) {
+    console.error("Error in LLM API request:", error);
+    return "Error generating response";
+  }
 };
 
 const urlMapping = [
@@ -118,11 +144,6 @@ const urlMapping = [
     pattern: new URLPattern({ pathname: "/upvote" }),
     method: "POST",
     fn: handlePostUpvote,
-  },
-  {
-    pattern: new URLPattern({ pathname: "/llm-answer" }),
-    method: "POST",
-    fn: handlePostAnswerToLLM,
   },
 ];
 
