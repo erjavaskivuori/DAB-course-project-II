@@ -20,6 +20,9 @@
   };
 
   const postAnswer = async (event) => {
+    if (questionInput === "") {
+      return;
+    }
     const user = get(userUuid);
     const data = {
       question: questionId,
