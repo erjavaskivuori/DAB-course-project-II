@@ -28,4 +28,6 @@ CREATE TABLE upvotes (
   user_id TEXT NOT NULL
 );
 
-/* TODO: Add indexes */
+CREATE INDEX idx_questions_course_id_last_updated ON questions(course_id, last_updated);
+CREATE INDEX idx_answers_question_id_last_updated ON answers(question_id, last_updated);
+CREATE UNIQUE INDEX idx_unique_upvote ON upvotes(user_id, object_id, object_type);
