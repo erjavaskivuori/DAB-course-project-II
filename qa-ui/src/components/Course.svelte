@@ -62,7 +62,7 @@
         </button>
       </div>
       <h2 class="text-xl mt-7 mb-4">Questions:</h2>
-      {#if course.questions}
+      {#if course.questions && course.questions[0].id !== null}
         <ul>
           {#each course.questions as question (question.id)}
             <li>
