@@ -1,0 +1,23 @@
+FROM node:lts-alpine3.17 as build
+
+WORKDIR /app
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY *.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN astro build
+
+FROM lukechannings/deno:v1.37.0 as server
+
+EXPOSE 3000
+
+WORKDIR /app
+
+COPY --from=build /app/dist .
+
+CMD [ "run", "--unstable", "--allow-net", "--allow-read", "--allow-env", "./server/entry.mjs" ]
