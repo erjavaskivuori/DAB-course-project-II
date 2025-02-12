@@ -19,7 +19,10 @@
   <ul>
     {#each courses as course}
       <li>
-        <a href="/courses/{course.id}" class="block max-w-m p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 my-3">
+        <a 
+        href="/courses/{course.id}"
+        data-testid="course"
+        class="block max-w-m p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 my-3">
           <p class="text-lg">{course.title}</p>
         </a>
       </li>
